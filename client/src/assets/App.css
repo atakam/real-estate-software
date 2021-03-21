@@ -4,3 +4,7 @@
 .list-controls {
     padding: 0 !important;
 }
+.list-notes {
+    padding: 5px;
+    font-size: 12px !important;
+}

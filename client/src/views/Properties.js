@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Card, CardBody, Button } from "shards-react";
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Popover, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -20,6 +20,9 @@ class Tables extends React.Component {
     this.state = {
       openPropertyDialog: false,
       confirmDialog: false,
+      openPopover: false,
+      popoverContent: null,
+      anchorEl: null,
       property: null,
       properties: [],
       managers: []
@@ -36,7 +39,10 @@ class Tables extends React.Component {
     this.setState({
       openPropertyDialog: false,
       property: null,
-      confirmDialog: false
+      confirmDialog: false,
+      popoverContent: null,
+      openPopover: false,
+      anchorEl: null
     });
   };
 
@@ -103,6 +109,14 @@ class Tables extends React.Component {
     this.closeDialog();
   }
 
+  openPopover = ({ notes, anchorEl }) => {
+    this.setState({
+      popoverContent: notes || 'Pas de notes',
+      anchorEl,
+      openPopover: true
+    });
+  }
+
   componentDidMount() {
     this.getProperties();
     this.getManagers();
@@ -135,6 +149,21 @@ class Tables extends React.Component {
               onCancel={this.closeDialog}
             />}
         />
+        <Popover
+          open={this.state.openPopover}
+          anchorEl={this.state.anchorEl}
+          onClose={this.closeDialog}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Typography className={'list-notes'}>{this.state.popoverContent}</Typography>
+        </Popover>
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
           <PageTitle lg="10" title="Propriétés" subtitle="Liste de tous les proprietés" className="text-sm-left" />
@@ -167,10 +196,10 @@ class Tables extends React.Component {
                         Concierge
                       </th>
                       <th scope="col" className="border-0">
-                        Notes
+                        Contrat
                       </th>
                       <th scope="col" className="border-0">
-                        Contrat
+                        Notes
                       </th>
                       <th scope="col" className="border-0">
                         Statut
@@ -189,8 +218,12 @@ class Tables extends React.Component {
                             <td>{t.propertyName}</td>
                             <td>{t.unit}</td>
                             <td>{this.getManager(t.manager_id).name}</td>
-                            <td>{t.notes}</td>
                             <td>{t.contract_id}</td>
+                            <td>
+                              <Button outline size="sm" theme="secondary" className="mb-2 mr-1" onClick={(e) => this.openPopover({ notes: t.notes, anchorEl: e.currentTarget })}>
+                                Notes
+                              </Button>
+                            </td>
                             <td>{t.isActive ?
                               <Button outline size="sm" theme="success" className="mb-2 mr-1">
                                 Actif

@@ -18,7 +18,7 @@ const UserAccountDetails = ({ manager, callback }) => {
     const [firstName, setFirstName] = React.useState(manager ? manager.firstName : '');
     const [lastName, setLastName] = React.useState(manager ? manager.lastName : '');
     const [phoneNumber, setPhoneNumber] = React.useState(manager ? manager.phoneNumber : '');
-    const [waNumber, setWANumber] = React.useState(manager ? manager.waNumber : null);
+    const [waNumber, setWANumber] = React.useState(manager ? manager.waNumber : '');
     const [email, setEmail] = React.useState(manager ? manager.email : '');
     const [notes, setNotes] = React.useState(manager ? manager.notes : '');
 
@@ -28,7 +28,7 @@ const UserAccountDetails = ({ manager, callback }) => {
         lastName,
         email,
         phoneNumber,
-        waNumber: waNumber === null && phoneNumber,
+        waNumber,
         notes
     };
 

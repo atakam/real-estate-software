@@ -20,7 +20,7 @@ const UserAccountDetails = ({ tenant, callback }) => {
     const [lastName, setLastName] = React.useState(tenant ? tenant.lastName : '');
     const [dateOfBirth, setDOB] = React.useState(tenant ? tenant.dateOfBirth : '');
     const [phoneNumber, setPhoneNumber] = React.useState(tenant ? tenant.phoneNumber : '');
-    const [waNumber, setWANumber] = React.useState(tenant ? tenant.waNumber : null);
+    const [waNumber, setWANumber] = React.useState(tenant ? tenant.waNumber : '');
     const [email, setEmail] = React.useState(tenant ? tenant.email : '');
     const [isActive, setActive] = React.useState(tenant ? tenant.isActive : true);
     const [notes, setNotes] = React.useState(tenant ? tenant.notes : '');
@@ -31,7 +31,7 @@ const UserAccountDetails = ({ tenant, callback }) => {
         lastName,
         email,
         phoneNumber,
-        waNumber: waNumber === null && phoneNumber,
+        waNumber,
         dateOfBirth,
         isActive,
         notes
