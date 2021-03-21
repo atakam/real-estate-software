@@ -26,13 +26,24 @@ const UserAccountDetails = ({ tenant, callback }) => {
     const [isActive, setActive] = React.useState(tenant ? tenant.isActive : true);
     const [notes, setNotes] = React.useState(tenant ? tenant.notes : '');
 
+    const values = {
+        id,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        waNumber: waNumber === null && phoneNumber,
+        dateOfBirth,
+        isActive,
+        notes
+    };
+
     const submitTenant = () => {
         if (id) { // update tenant
-            updateTenant();
+            updateTenant(values, callback);
         } else { // create tenant
-            createTenant();
+            createTenant(values, callback);
         }
-        callback();
     }
 
     return (

@@ -55,7 +55,7 @@ app.get("/logout", logoutRouter);
 app.post("/login", loginPostRouter);
 app.post("/forgotpw", forgotPassword);
 
-app.get("/tenant/find", getTenants);
+app.get("/tenant/findAll", getTenants);
 app.delete("/tenant/delete/:id", deleteTenant);
 app.post("/tenant/create", createTenant);
 app.put("/tenant/update/:id", updateTenant);

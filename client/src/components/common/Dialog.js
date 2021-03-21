@@ -20,14 +20,15 @@ const styles = (theme) => ({
 });
 
 const SimpleDialog = withStyles(styles)((props) => {
-    const { title, onClose, open, content, classes } = props;
+    let { title, onClose, open, content, classes, width } = props;
+    width = width || 'lg';
 
     const handleClose = () => {
         onClose();
     };
 
     return (
-        <Dialog onClose={handleClose} fullWidth maxWidth="lg" aria-labelledby="simple-dialog-title" open={open}>
+        <Dialog onClose={handleClose} fullWidth maxWidth={width} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title" onClose={handleClose}>
                 {title}
                 <IconButton

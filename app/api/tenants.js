@@ -4,7 +4,7 @@ const ndb = require("../../databasePool");
 const getTenants = (req, res) => {
   const db = ndb();
   db.query(
-    "SELECT *, contracts.id AS contract_id FROM tenants LEFT JOIN contracts ON contracts.id = tenants.contract_id ORDER BY form_completion.id DESC",
+    "SELECT *, contracts.id AS contract_id, tenants.id AS id FROM tenants LEFT JOIN contracts ON contracts.tenant_id = tenants.id ORDER BY tenants.id DESC",
     (err, result) => {
       if (err) {
         res.send({ err: err });
