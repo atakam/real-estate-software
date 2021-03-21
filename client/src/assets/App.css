@@ -1,0 +1,6 @@
+.list-controls button{
+    padding: .75rem;
+}
+.list-controls {
+    padding: 0 !important;
+}
