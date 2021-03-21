@@ -54,11 +54,26 @@ const deleteProperty = (id, callback) => {
     return deleteEntry({ id, callback, endPoint: 'property' });
 }
 
+const updateManager = (values, callback) => {
+    return update({ values, callback, endPoint: 'manager' });
+}
+
+const createManager = (values, callback) => {
+    return create({ values, callback, endPoint: 'manager' });
+}
+
+const deleteManager = (id, callback) => {
+    return deleteEntry({ id, callback, endPoint: 'manager' });
+}
+
 export {
     updateTenant,
     createTenant,
     deleteTenant,
     updateProperty,
     createProperty,
-    deleteProperty
+    deleteProperty,
+    updateManager,
+    createManager,
+    deleteManager
 }

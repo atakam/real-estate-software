@@ -13,6 +13,7 @@ import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 import Tenants from "./views/Tenants";
 import Properties from "./views/Properties";
+import Managers from "./views/Managers";
 import BlogPosts from "./views/BlogPosts";
 
 export default [
@@ -36,6 +37,11 @@ export default [
     path: "/properties",
     layout: DefaultLayout,
     component: Properties
+  },
+  {
+    path: "/managers",
+    layout: DefaultLayout,
+    component: Managers
   },
   {
     path: "/user-profile-lite",

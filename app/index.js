@@ -30,6 +30,12 @@ const {
   getProperties
 } = require('./api/properties');
 
+const {
+  createManager,
+  updateManager,
+  deleteManager,
+  getManagers
+} = require('./api/managers');
 
 app.use(express.json());
 app.use(
@@ -71,5 +77,10 @@ app.get("/property/findAll", getProperties);
 app.delete("/property/delete/:id", deleteProperty);
 app.post("/property/create", createProperty);
 app.put("/property/update/:id", updateProperty);
+
+app.get("/manager/findAll", getManagers);
+app.delete("/manager/delete/:id", deleteManager);
+app.post("/manager/create", createManager);
+app.put("/manager/update/:id", updateManager);
 
 module.exports = app;

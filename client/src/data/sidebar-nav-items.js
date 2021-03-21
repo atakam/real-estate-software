@@ -8,13 +8,18 @@ export default function () {
     },
     {
       title: "Locataires",
-      htmlBefore: '<i class="material-icons">person</i>',
+      htmlBefore: '<i class="material-icons">group</i>',
       to: "/tenants",
     },
     {
       title: "Propriétés",
       htmlBefore: '<i class="material-icons">house</i>',
       to: "/properties",
+    },
+    {
+      title: "Concierges",
+      htmlBefore: '<i class="material-icons">person</i>',
+      to: "/managers",
     },
     {
       title: "Blog Posts",

@@ -8,84 +8,84 @@ import AddIcon from '@material-ui/icons/Add';
 
 import PageTitle from "../components/common/PageTitle";
 import Dialog from "../components/common/Dialog";
-import Property from "./forms/Property";
+import Manager from "./forms/Manager";
 import Confirm from "../components/common/Confirm";
 
-import { deleteProperty } from "../utils/actions";
+import { deleteManager } from "../utils/actions";
 
 class Tables extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      openPropertyDialog: false,
+      openManagerDialog: false,
       confirmDialog: false,
-      property: null,
-      properties: []
+      manager: null,
+      managers: []
     }
   }
 
-  openProperty = (property) => {
+  openManager = (manager) => {
     this.setState({
-      openPropertyDialog: true
+      openManagerDialog: true
     });
   };
 
   closeDialog = () => {
     this.setState({
-      openPropertyDialog: false,
-      property: null,
+      openManagerDialog: false,
+      manager: null,
       confirmDialog: false
     });
   };
 
-  createProperty = () => {
+  createManager = () => {
     this.setState({
-      dialogTitle: 'Ajouter une Propriété'
-    }, this.openProperty);
+      dialogTitle: 'Ajouter un Concierge'
+    }, this.openManager);
   }
 
-  editProperty = (id) => {
-    const property = this.getProperty(id);
+  editManager = (id) => {
+    const manager = this.getManager(id);
     this.setState({
-      property,
-      dialogTitle: `Modifier (${property.propertyName} ${property.unit})`
-    }, this.openProperty);
+      manager,
+      dialogTitle: `Modifier (${manager.firstName} ${manager.lastName})`
+    }, this.openManager);
   }
 
-  deleteProperty = (id) => {
-    const property = this.getProperty(id);
+  deleteManager = (id) => {
+    const manager = this.getManager(id);
     this.setState({
       confirmDialog: true,
-      dialogTitle: `Supprimer ${property.propertyName} ${property.unit}?`,
-      deletePropertyId: id
+      dialogTitle: `Supprimer ${manager.firstName} ${manager.lastName}?`,
+      deleteManagerId: id
     });
   }
 
-  getProperty = (id) => {
-    let property = null;
-    this.state.properties.forEach((t) => {
+  getManager = (id) => {
+    let manager = null;
+    this.state.managers.forEach((t) => {
       if (t.id === id) {
-        property = t;
+        manager = t;
       }
     });
-    return property;
+    return manager;
   }
 
-  getProperties = () => {
-    fetch('/property/findAll')
+  getManagers = () => {
+    fetch('/manager/findAll')
       .then(response => response.json())
-      .then(data => this.setState({ properties: data }))
+      .then(data => this.setState({ managers: data }))
       .catch(error => console.error(error.message));
   }
 
   handleCallback = () => {
-    this.getProperties();
+    this.getManagers();
     this.closeDialog();
   }
 
   componentDidMount() {
-    this.getProperties();
+    this.getManagers();
   }
 
   render() {
@@ -93,9 +93,9 @@ class Tables extends React.Component {
       <Container fluid className="main-content-container px-4">
         <Dialog
           title={this.state.dialogTitle}
-          open={this.state.openPropertyDialog}
+          open={this.state.openManagerDialog}
           onClose={this.closeDialog}
-          content={<Property property={this.state.property} callback={this.handleCallback} />}
+          content={<Manager manager={this.state.manager} callback={this.handleCallback} />}
         />
         <Dialog
           title={this.state.dialogTitle}
@@ -104,16 +104,16 @@ class Tables extends React.Component {
           width='sm'
           content={
             <Confirm
-              text={'Êtes-vous sûr de vouloir supprimer cette proprieté?'}
-              onConfirm={() => deleteProperty(this.state.deletePropertyId, this.handleCallback)}
+              text={'Êtes-vous sûr de vouloir supprimer ce concierge?'}
+              onConfirm={() => deleteManager(this.state.deleteManagerId, this.handleCallback)}
               onCancel={this.closeDialog}
             />}
         />
         {/* Page Header */}
         <Row noGutters className="page-header py-4">
-          <PageTitle lg="10" title="Propriétés" subtitle="Liste de tous les proprietés" className="text-sm-left" />
-          <Button size="sm" theme="primary" className="mb-2 mr-1" onClick={this.createProperty}>
-            <AddIcon /> AJOUTER PROPRIÉTÉ
+          <PageTitle lg="10" title="Concierges" subtitle="Liste de tous les concierges" className="text-sm-left" />
+          <Button size="sm" theme="primary" className="mb-2 mr-1" onClick={this.createManager}>
+            <AddIcon /> AJOUTER CONCIERGE
           </Button>
         </Row>
 
@@ -135,19 +135,13 @@ class Tables extends React.Component {
                         Nom
                       </th>
                       <th scope="col" className="border-0">
-                        Unité
+                        Téléphone
                       </th>
                       <th scope="col" className="border-0">
-                        Gerant
+                        WhatsApp
                       </th>
                       <th scope="col" className="border-0">
-                        Notes
-                      </th>
-                      <th scope="col" className="border-0">
-                        Contrat
-                      </th>
-                      <th scope="col" className="border-0">
-                        Statut
+                        Email
                       </th>
                       <th scope="col" className="border-0">
                         Contrôles
@@ -156,25 +150,17 @@ class Tables extends React.Component {
                   </thead>
                   <tbody>
                     {
-                      this.state.properties.map((t, idx) => {
+                      this.state.managers.map((t, idx) => {
                         return (
                           <tr key={idx}>
                             <td>{idx + 1}</td>
-                            <td>{t.propertyName}</td>
-                            <td>{t.unit}</td>
-                            <td>{t.manager}</td>
-                            <td>{t.notes}</td>
-                            <td>{t.contract_id}</td>
-                            <td>{t.isActive ?
-                              <Button outline size="sm" theme="success" className="mb-2 mr-1">
-                                Actif
-                            </Button> :
-                              <Button outline size="sm" theme="danger" className="mb-2 mr-1">
-                                Suspendu
-                            </Button>}</td>
+                            <td>{t.firstName + ' ' + t.lastName}</td>
+                            <td>{t.phoneNumber}</td>
+                            <td>{t.waNumber}</td>
+                            <td>{t.email}</td>
                             <td className='list-controls'>
-                              <Tooltip title="Modifier Propriété">
-                                <IconButton aria-label="edit property" color="primary" onClick={() => this.editProperty(t.id)}>
+                              <Tooltip title="Modifier Concierge">
+                                <IconButton aria-label="edit manager" color="primary" onClick={() => this.editManager(t.id)}>
                                   <EditIcon />
                                 </IconButton>
                               </Tooltip>
@@ -183,9 +169,9 @@ class Tables extends React.Component {
                                   <DescriptionIcon />
                                 </IconButton>
                               </Tooltip>
-                              <Tooltip title="Supprimer Propriété">
-                                <IconButton aria-label="delete property" color="secondary"
-                                  onClick={() => this.deleteProperty(t.id)}>
+                              <Tooltip title="Supprimer Concierge">
+                                <IconButton aria-label="delete manager" color="secondary"
+                                  onClick={() => this.deleteManager(t.id)}>
                                   <DeleteIcon />
                                 </IconButton>
                               </Tooltip>
