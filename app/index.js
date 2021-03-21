@@ -23,6 +23,13 @@ const {
   getTenants
 } = require('./api/tenants');
 
+const {
+  createProperty,
+  updateProperty,
+  deleteProperty,
+  getProperties
+} = require('./api/properties');
+
 
 app.use(express.json());
 app.use(
@@ -59,5 +66,10 @@ app.get("/tenant/findAll", getTenants);
 app.delete("/tenant/delete/:id", deleteTenant);
 app.post("/tenant/create", createTenant);
 app.put("/tenant/update/:id", updateTenant);
+
+app.get("/property/findAll", getProperties);
+app.delete("/property/delete/:id", deleteProperty);
+app.post("/property/create", createProperty);
+app.put("/property/update/:id", updateProperty);
 
 module.exports = app;

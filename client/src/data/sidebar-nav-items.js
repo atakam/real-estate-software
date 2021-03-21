@@ -12,6 +12,11 @@ export default function () {
       to: "/tenants",
     },
     {
+      title: "Propriétés",
+      htmlBefore: '<i class="material-icons">house</i>',
+      to: "/properties",
+    },
+    {
       title: "Blog Posts",
       htmlBefore: '<i class="material-icons">vertical_split</i>',
       to: "/blog-posts",

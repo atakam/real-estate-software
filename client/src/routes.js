@@ -12,6 +12,7 @@ import Errors from "./views/Errors";
 import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 import Tenants from "./views/Tenants";
+import Properties from "./views/Properties";
 import BlogPosts from "./views/BlogPosts";
 
 export default [
@@ -30,6 +31,11 @@ export default [
     path: "/tenants",
     layout: DefaultLayout,
     component: Tenants
+  },
+  {
+    path: "/properties",
+    layout: DefaultLayout,
+    component: Properties
   },
   {
     path: "/user-profile-lite",
