@@ -4,7 +4,7 @@ const ndb = require("../../databasePool");
 const getProperties = (req, res) => {
   const db = ndb();
   db.query(
-    "SELECT *, contracts.id AS contract_id, properties.id AS id FROM properties LEFT JOIN contracts ON contracts.property_id = properties.id ORDER BY properties.id ASC",
+    "SELECT *, contracts.id AS contract_id, properties.id AS id, managers.id AS manager_id FROM properties LEFT JOIN contracts ON contracts.property_id = properties.id LEFT JOIN managers ON managers.id = properties.manager_id ORDER BY properties.id ASC",
     (err, result) => {
       if (err) {
         res.send({ err: err });
@@ -20,14 +20,16 @@ const createProperty = (req, res) => {
     propertyName,
     unit,
     isActive,
-    notes
+    notes,
+    manager_id
   } = req.body;
 
   const property = {
     propertyName,
     unit,
     isActive,
-    notes
+    notes,
+    manager_id
   };
 
   const db = ndb();
@@ -66,14 +68,16 @@ const updateProperty = (req, res) => {
     propertyName,
     unit,
     isActive,
-    notes
+    notes,
+    manager_id
   } = req.body;
 
   let property = {
     propertyName,
     unit,
     isActive,
-    notes
+    notes,
+    manager_id
   };
 
   property = clean(property);

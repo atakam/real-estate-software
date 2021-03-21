@@ -13,20 +13,22 @@ import {
 } from "shards-react";
 import { updateProperty, createProperty } from "../../utils/actions";
 
-const UserAccountDetails = ({ property, callback }) => {
+const UserAccountDetails = ({ property, managers, callback }) => {
 
     const id = property ? property.id : null;
     const [propertyName, setPropertyName] = React.useState(property ? property.propertyName : '');
     const [unit, setUnit] = React.useState(property ? property.unit : '');
     const [isActive, setActive] = React.useState(property ? property.isActive : true);
-    const [notes, setNotes] = React.useState(property ? property.notes : '');
+    const [manager, setManager] = React.useState((property && property.manager_id) || (managers[0] && managers[0].id) || '');
+    const [notes, setNotes] = React.useState((property && property.notes) || '');
 
     const values = {
         id,
         propertyName,
         unit,
         isActive,
-        notes
+        notes,
+        manager_id: Number(manager)
     };
 
     const submitProperty = () => {
@@ -48,7 +50,7 @@ const UserAccountDetails = ({ property, callback }) => {
                         <Col>
                             <Form>
                                 <Row form>
-                                    <Col md="6" className="form-group">
+                                    <Col md="3" className="form-group">
                                         <label htmlFor="fePropertyName">Nom de propriété</label>
                                         <FormInput
                                             id="fePropertyName"
@@ -65,6 +67,22 @@ const UserAccountDetails = ({ property, callback }) => {
                                             value={unit}
                                             onChange={(e) => setUnit(e.currentTarget.value)}
                                         />
+                                    </Col>
+                                    <Col md="3" className="form-group">
+                                        <label htmlFor="feManager">Concierge</label>
+                                        <FormSelect
+                                            id="feManager"
+                                            value={manager}
+                                            onChange={(e) => setManager(e.currentTarget.value)}
+                                        >
+                                            {
+                                                managers.map((m) => {
+                                                    return (
+                                                        <option key={m.id} value={m.id} >{m.firstName + ' ' + m.lastName}</option>
+                                                    );
+                                                })
+                                            }
+                                        </FormSelect>
                                     </Col>
                                     <Col md="3" className="form-group">
                                         <label htmlFor="feActive">Statut</label>

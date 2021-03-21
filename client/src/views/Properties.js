@@ -21,7 +21,8 @@ class Tables extends React.Component {
       openPropertyDialog: false,
       confirmDialog: false,
       property: null,
-      properties: []
+      properties: [],
+      managers: []
     }
   }
 
@@ -72,10 +73,28 @@ class Tables extends React.Component {
     return property;
   }
 
+  getManager = (id) => {
+    let manager = {};
+    this.state.managers.forEach((t) => {
+      if (t.id === id) {
+        manager = t;
+      }
+    });
+    manager.name = manager.firstName ? manager.firstName + ' ' + manager.lastName : '';
+    return manager;
+  }
+
   getProperties = () => {
     fetch('/property/findAll')
       .then(response => response.json())
       .then(data => this.setState({ properties: data }))
+      .catch(error => console.error(error.message));
+  }
+
+  getManagers = () => {
+    fetch('/manager/findAll')
+      .then(response => response.json())
+      .then(data => this.setState({ managers: data }))
       .catch(error => console.error(error.message));
   }
 
@@ -86,6 +105,7 @@ class Tables extends React.Component {
 
   componentDidMount() {
     this.getProperties();
+    this.getManagers();
   }
 
   render() {
@@ -95,7 +115,13 @@ class Tables extends React.Component {
           title={this.state.dialogTitle}
           open={this.state.openPropertyDialog}
           onClose={this.closeDialog}
-          content={<Property property={this.state.property} callback={this.handleCallback} />}
+          content={
+            <Property
+              property={this.state.property}
+              callback={this.handleCallback}
+              managers={this.state.managers}
+            />
+          }
         />
         <Dialog
           title={this.state.dialogTitle}
@@ -138,7 +164,7 @@ class Tables extends React.Component {
                         Unité
                       </th>
                       <th scope="col" className="border-0">
-                        Gerant
+                        Concierge
                       </th>
                       <th scope="col" className="border-0">
                         Notes
@@ -162,7 +188,7 @@ class Tables extends React.Component {
                             <td>{idx + 1}</td>
                             <td>{t.propertyName}</td>
                             <td>{t.unit}</td>
-                            <td>{t.manager}</td>
+                            <td>{this.getManager(t.manager_id).name}</td>
                             <td>{t.notes}</td>
                             <td>{t.contract_id}</td>
                             <td>{t.isActive ?
