@@ -7,6 +7,11 @@ export default function () {
       htmlAfter: ""
     },
     {
+      title: "Contrats",
+      htmlBefore: '<i class="material-icons">description</i>',
+      to: "/contracts",
+    },
+    {
       title: "Locataires",
       htmlBefore: '<i class="material-icons">group</i>',
       to: "/tenants",
@@ -20,6 +25,11 @@ export default function () {
       title: "Concierges",
       htmlBefore: '<i class="material-icons">person</i>',
       to: "/managers",
+    },
+    {
+      title: "Modèles de Contrat",
+      htmlBefore: '<i class="material-icons">insert_drive_file</i>',
+      to: "/templates",
     },
     {
       title: "Blog Posts",

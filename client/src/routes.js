@@ -14,6 +14,8 @@ import Tables from "./views/Tables";
 import Tenants from "./views/Tenants";
 import Properties from "./views/Properties";
 import Managers from "./views/Managers";
+import Contracts from "./views/Contracts";
+import Templates from "./views/Templates";
 import BlogPosts from "./views/BlogPosts";
 
 export default [
@@ -29,6 +31,11 @@ export default [
     component: BlogOverview
   },
   {
+    path: "/contracts",
+    layout: DefaultLayout,
+    component: Contracts
+  },
+  {
     path: "/tenants",
     layout: DefaultLayout,
     component: Tenants
@@ -42,6 +49,11 @@ export default [
     path: "/managers",
     layout: DefaultLayout,
     component: Managers
+  },
+  {
+    path: "/templates",
+    layout: DefaultLayout,
+    component: Templates
   },
   {
     path: "/user-profile-lite",

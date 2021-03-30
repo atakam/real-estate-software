@@ -37,6 +37,14 @@ const {
   getManagers
 } = require('./api/managers');
 
+const {
+  createTemplate,
+  updateTemplate,
+  deleteTemplate,
+  getTemplates,
+  getSections
+} = require('./api/templates');
+
 app.use(express.json());
 app.use(
   cors({
@@ -82,5 +90,11 @@ app.get("/manager/findAll", getManagers);
 app.delete("/manager/delete/:id", deleteManager);
 app.post("/manager/create", createManager);
 app.put("/manager/update/:id", updateManager);
+
+app.get("/template/findAll", getTemplates);
+app.get("/template_sections/findAll/:id", getSections);
+app.delete("/template/delete/:id", deleteTemplate);
+app.post("/template/create", createTemplate);
+app.put("/template/update/:id", updateTemplate);
 
 module.exports = app;

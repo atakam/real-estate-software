@@ -66,14 +66,48 @@ const deleteManager = (id, callback) => {
     return deleteEntry({ id, callback, endPoint: 'manager' });
 }
 
+const updateContract = (values, callback) => {
+    return update({ values, callback, endPoint: 'contract' });
+}
+
+const createContract = (values, callback) => {
+    return create({ values, callback, endPoint: 'contract' });
+}
+
+const deleteContract = (id, callback) => {
+    return deleteEntry({ id, callback, endPoint: 'contract' });
+}
+
+const updateTemplate = (values, callback) => {
+    return update({ values, callback, endPoint: 'template' });
+}
+
+const createTemplate = (values, callback) => {
+    return create({ values, callback, endPoint: 'template' });
+}
+
+const deleteTemplate = (id, callback) => {
+    return deleteEntry({ id, callback, endPoint: 'template' });
+}
+
 export {
     updateTenant,
     createTenant,
     deleteTenant,
+
     updateProperty,
     createProperty,
     deleteProperty,
+
     updateManager,
     createManager,
-    deleteManager
+    deleteManager,
+
+    updateContract,
+    createContract,
+    deleteContract,
+
+    updateTemplate,
+    createTemplate,
+    deleteTemplate
 }
