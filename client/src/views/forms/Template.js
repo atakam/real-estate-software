@@ -20,6 +20,7 @@ const UserAccountDetails = ({ template, callback }) => {
 
     const id = template ? template.id : null;
     const [t_name, setName] = React.useState(template ? template.t_name : '');
+    const [number_parties, setNumParties] = React.useState(template ? template.number_parties : '');
     const [sections, setSections] = React.useState([]);
 
     const getSections = () => {
@@ -41,6 +42,7 @@ const UserAccountDetails = ({ template, callback }) => {
     const values = {
         id,
         t_name,
+        number_parties,
         sections
     };
 
@@ -102,6 +104,15 @@ const UserAccountDetails = ({ template, callback }) => {
                                             placeholder="nom"
                                             value={t_name}
                                             onChange={(e) => setName(e.currentTarget.value)}
+                                        />
+                                    </Col>
+                                    <Col md="6" className="form-group">
+                                        <label htmlFor="feParties">Nombre de parties</label>
+                                        <FormInput
+                                            id="feParties"
+                                            placeholder="#"
+                                            value={number_parties}
+                                            onChange={(e) => setNumParties(e.currentTarget.value)}
                                         />
                                     </Col>
                                 </Row>

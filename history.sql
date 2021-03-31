@@ -8,14 +8,16 @@ CREATE TABLE tenants(
   waNumber varchar(15),
   dateOfBirth DATE,
   isActive int,
-  notes varchar(255)
+  notes text
 ) default charset utf8 comment '';
 /* 2021-03-20 22:42:36 [130 ms] */
 CREATE TABLE contracts(
   id int NOT NULL primary key AUTO_INCREMENT comment 'primary key',
+  reference VARCHAR(255),
   signed_date DATETIME,
   property_id int,
-  tenant_id int
+  template_id int,
+  notes text
 ) default charset utf8 comment '';
 /* 2021-03-21 08:40:50 [276 ms] */
 CREATE TABLE `properties` (
@@ -24,7 +26,7 @@ CREATE TABLE `properties` (
   `unit` varchar(255) DEFAULT NULL,
   `manager_id` int DEFAULT NULL,
   `isActive` int DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8;
 /* 2021-03-21 09:24:38 [94 ms] */
@@ -35,7 +37,7 @@ CREATE TABLE `managers` (
   `email` varchar(255) DEFAULT NULL,
   `phoneNumber` varchar(15) DEFAULT NULL,
   `waNumber` varchar(15) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 DEFAULT CHARSET = utf8;
 /* 2021-03-21 14:40:37 [123 ms] */
@@ -49,4 +51,9 @@ CREATE TABLE template_sections(
   template_id varchar(255),
   content text,
   PRIMARY KEY (id, template_id)
+) default charset utf8 comment '';
+CREATE TABLE contract_tenant(
+  contract_id int,
+  tenant_id int,
+  PRIMARY KEY (contract_id, tenant_id)
 ) default charset utf8 comment '';

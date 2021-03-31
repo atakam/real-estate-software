@@ -19,3 +19,13 @@
 .contract-content {
     padding: 20px;
 }
+
+.delete-tenant-contract {
+    position: absolute !important;
+    top: 25px;
+    right: 0;
+}
+
+.tenant-list-contract {
+    padding: 5px;
+}

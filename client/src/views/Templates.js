@@ -163,7 +163,7 @@ class Tables extends React.Component {
                         Nom du modèle
                       </th>
                       <th scope="col" className="border-0">
-                        Nombre de contrats
+                        Nombre de parties
                       </th>
                       <th scope="col" className="border-0">
                         Contrôles
@@ -177,7 +177,7 @@ class Tables extends React.Component {
                           <tr key={idx}>
                             <td>{idx + 1}</td>
                             <td>{t.t_name}</td>
-                            <td>{t.count}</td>
+                            <td>{t.number_parties}</td>
                             <td className='list-controls'>
                               <Tooltip title="Apercu du Modèle">
                                 <IconButton aria-label="view template" color="primary" onClick={() => this.viewTemplate(t.id)}>

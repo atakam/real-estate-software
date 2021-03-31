@@ -45,6 +45,13 @@ const {
   getSections
 } = require('./api/templates');
 
+const {
+  createContract,
+  updateContract,
+  deleteContract,
+  getContracts
+} = require('./api/contracts');
+
 app.use(express.json());
 app.use(
   cors({
@@ -96,5 +103,10 @@ app.get("/template_sections/findAll/:id", getSections);
 app.delete("/template/delete/:id", deleteTemplate);
 app.post("/template/create", createTemplate);
 app.put("/template/update/:id", updateTemplate);
+
+app.get("/contract/findAll", getContracts);
+app.delete("/contract/delete/:id", deleteContract);
+app.post("/contract/create", createContract);
+app.put("/contract/update/:id", updateContract);
 
 module.exports = app;

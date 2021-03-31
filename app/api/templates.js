@@ -33,11 +33,13 @@ const getSections = (req, res) => {
 
 const createTemplate = (req, res) => {
   const {
-    t_name
+    t_name,
+    number_parties
   } = req.body;
 
   const template = {
-    t_name
+    t_name,
+    number_parties
   };
 
   const db = ndb();
@@ -74,14 +76,14 @@ const updateTemplate = (req, res) => {
   const id = req.params.id;
   const {
     t_name,
+    number_parties,
     sections
   } = req.body;
 
   let template = {
-    t_name
+    t_name,
+    number_parties
   };
-
-  console.log({ sections });
 
   sections.forEach(el => {
     let tsections = {
@@ -90,8 +92,6 @@ const updateTemplate = (req, res) => {
       content: JSON.stringify(el)
     };
     tsections = clean(tsections);
-
-    console.log({ tsections })
 
     if (el.id) {
       const db1 = ndb();

@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import DescriptionIcon from '@material-ui/icons/Description';
 import AddIcon from '@material-ui/icons/Add';
+import DownloadIcon from '@material-ui/icons/GetApp';
 
 import PageTitle from "../components/common/PageTitle";
 import Dialog from "../components/common/Dialog";
@@ -12,6 +13,7 @@ import Contract from "./forms/Contract";
 import Confirm from "../components/common/Confirm";
 
 import { deleteContract } from "../utils/actions";
+import { getDateDayDiff } from "../utils/utils";
 
 class Tables extends React.Component {
   constructor(props) {
@@ -24,7 +26,11 @@ class Tables extends React.Component {
       popoverContent: null,
       anchorEl: null,
       contract: null,
-      contracts: []
+      contracts: [],
+      templates: [],
+      properties: [],
+      tenants: [],
+      tabValue: 0
     }
   }
 
@@ -47,7 +53,7 @@ class Tables extends React.Component {
 
   createContract = () => {
     this.setState({
-      dialogTitle: 'Ajouter un Contrat'
+      dialogTitle: 'Créer un Contrat'
     }, this.openContract);
   }
 
@@ -55,7 +61,7 @@ class Tables extends React.Component {
     const contract = this.getContract(id);
     this.setState({
       contract,
-      dialogTitle: `Modifier (${contract.firstName} ${contract.lastName})`
+      dialogTitle: `Modifier Contrat No. ${contract.reference}`
     }, this.openContract);
   }
 
@@ -63,9 +69,17 @@ class Tables extends React.Component {
     const contract = this.getContract(id);
     this.setState({
       confirmDialog: true,
-      dialogTitle: `Supprimer ${contract.firstName} ${contract.lastName}?`,
+      dialogTitle: `Supprimer Contrat No. ${contract.reference}`,
       deleteContractId: id
     });
+  }
+
+  setTabValue = (tabValue) => {
+    this.setState({ tabValue })
+  }
+
+  downloadDoc = () => {
+
   }
 
   getContract = (id) => {
@@ -85,6 +99,27 @@ class Tables extends React.Component {
       .catch(error => console.error(error.message));
   }
 
+  getTemplates = () => {
+    fetch('/template/findAll')
+      .then(response => response.json())
+      .then(data => this.setState({ templates: data }))
+      .catch(error => console.error(error.message));
+  }
+
+  getTenants = () => {
+    fetch('/tenant/findAll')
+      .then(response => response.json())
+      .then(data => this.setState({ tenants: data }))
+      .catch(error => console.error(error.message));
+  }
+
+  getProperties = () => {
+    fetch('/property/findAll')
+      .then(response => response.json())
+      .then(data => this.setState({ properties: data }))
+      .catch(error => console.error(error.message));
+  }
+
   handleCallback = () => {
     this.getContracts();
     this.closeDialog();
@@ -98,7 +133,52 @@ class Tables extends React.Component {
     });
   }
 
+  getTenant = (tid) => {
+    let tenant = null;
+    this.state.tenants.forEach((t) => {
+      if (t.id == tid) {
+        tenant = t;
+      }
+    });
+    return tenant;
+  }
+
+  getTemplate = (id) => {
+    let template = null;
+    this.state.templates.forEach((t) => {
+      if (t.id === id) {
+        template = t;
+      }
+    });
+    return template;
+  }
+
+  getTenantDisplay = (tids) => {
+    return JSON.parse(tids).map((tid) => {
+      const tenant = this.getTenant(tid);
+      return (
+        <div className='tenant-list-contract'>{tenant.firstName + ' ' + tenant.lastName}</div>
+      );
+    });
+  }
+
+  getProperty = (pid) => {
+    let _property = {
+      propertyName: '',
+      unit: ''
+    };
+    this.state.properties.forEach((t) => {
+      if (t.id == pid) {
+        _property = t;
+      }
+    });
+    return _property;
+  }
+
   componentDidMount() {
+    this.getTemplates();
+    this.getTenants();
+    this.getProperties();
     this.getContracts();
   }
 
@@ -109,8 +189,17 @@ class Tables extends React.Component {
           title={this.state.dialogTitle}
           open={this.state.openContractDialog}
           onClose={this.closeDialog}
-          width={null}
-          content={<Contract contract={this.state.contract} callback={this.handleCallback} />}
+          icons={this.state.tabValue === 2 &&
+            [<IconButton
+              aria-label="download"
+              onClick={this.downloadDoc}
+              color="primary"
+            >
+              <DownloadIcon />
+            </IconButton>]
+          }
+          fullScreen
+          content={<Contract contract={this.state.contract} templates={this.state.templates} tenants={this.state.tenants} properties={this.state.properties} callback={this.handleCallback} setTabValue={this.setTabValue} />}
         />
         <Dialog
           title={this.state.dialogTitle}
@@ -162,16 +251,19 @@ class Tables extends React.Component {
                         #
                       </th>
                       <th scope="col" className="border-0">
-                        Nom
+                        No. de référence
                       </th>
                       <th scope="col" className="border-0">
-                        Téléphone
+                        Modèle
                       </th>
                       <th scope="col" className="border-0">
-                        WhatsApp
+                        Locataires
                       </th>
                       <th scope="col" className="border-0">
-                        Email
+                        Propriété
+                      </th>
+                      <th scope="col" className="border-0">
+                        Date de revision
                       </th>
                       <th scope="col" className="border-0">
                         Notes
@@ -187,10 +279,17 @@ class Tables extends React.Component {
                         return (
                           <tr key={idx}>
                             <td>{idx + 1}</td>
-                            <td>{t.firstName + ' ' + t.lastName}</td>
-                            <td>{t.phoneNumber}</td>
-                            <td>{t.waNumber}</td>
-                            <td>{t.email}</td>
+                            <td>{t.reference}</td>
+                            <td>{this.getTemplate(t.template_id).t_name}</td>
+                            <td>
+                              <Button outline size="sm" theme="primary" className="mb-2 mr-1" onClick={(e) => this.openPopover({ notes: this.getTenantDisplay(t.tenant_ids), anchorEl: e.currentTarget })}>
+                                Voir Locataires
+                              </Button>
+                            </td>
+                            <td>{this.getProperty(t.property_id).propertyName + ' - ' + this.getProperty(t.property_id).unit}</td>
+                            <td style={getDateDayDiff({ referenceDate: new Date(t.revision_date), dateToCompare: new Date() }) <= 30 ? { color: 'red' } : { color: 'initial' }}>
+                              {t.revision_date && t.revision_date.split('T')[0]}
+                            </td>
                             <td>
                               <Button outline size="sm" theme="secondary" className="mb-2 mr-1" onClick={(e) => this.openPopover({ notes: t.notes, anchorEl: e.currentTarget })}>
                                 Notes

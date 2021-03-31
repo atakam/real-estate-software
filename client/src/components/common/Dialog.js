@@ -20,7 +20,7 @@ const styles = (theme) => ({
 });
 
 const SimpleDialog = withStyles(styles)((props) => {
-    let { title, onClose, open, content, classes, width } = props;
+    let { title, onClose, open, content, classes, width, fullScreen } = props;
     width = width || 'lg';
 
     const handleClose = () => {
@@ -28,9 +28,21 @@ const SimpleDialog = withStyles(styles)((props) => {
     };
 
     return (
-        <Dialog onClose={handleClose} fullWidth maxWidth={width} aria-labelledby="simple-dialog-title" open={open}>
+        <Dialog onClose={handleClose} fullWidth maxWidth={width} fullScreen={fullScreen} aria-labelledby="simple-dialog-title" open={open}>
             <DialogTitle id="simple-dialog-title" onClose={handleClose}>
                 {title}
+                {props.icons && props.icons.map((icon, idx) => {
+                    return React.cloneElement(
+                        icon,
+                        {
+                            key: idx,
+                            className: classes.closeButton,
+                            style: {
+                                right: ((8 + ((idx + 1) * 48)) + 'px')
+                            }
+                        }
+                    );
+                })}
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
