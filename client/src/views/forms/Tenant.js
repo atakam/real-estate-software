@@ -23,6 +23,10 @@ const UserAccountDetails = ({ tenant, callback }) => {
     const [waNumber, setWANumber] = React.useState(tenant ? tenant.waNumber : '');
     const [email, setEmail] = React.useState(tenant ? tenant.email : '');
     const [isActive, setActive] = React.useState(tenant ? tenant.isActive : true);
+    const [cni, setCNI] = React.useState(tenant ? tenant.cni : '');
+    const [cni_date, setCNIDate] = React.useState(tenant ? tenant.cni_date : '');
+    const [address, setAddress] = React.useState(tenant ? tenant.address : '');
+    const [job, setJob] = React.useState(tenant ? tenant.job : '');
     const [notes, setNotes] = React.useState(tenant ? tenant.notes : '');
 
     const values = {
@@ -32,8 +36,12 @@ const UserAccountDetails = ({ tenant, callback }) => {
         email,
         phoneNumber,
         waNumber,
-        dateOfBirth,
+        dateOfBirth: dateOfBirth.split('T')[0],
         isActive,
+        cni,
+        cni_date: cni_date.split('T')[0],
+        job,
+        address,
         notes
     };
 
@@ -114,6 +122,43 @@ const UserAccountDetails = ({ tenant, callback }) => {
                                             placeholder="Date de Naissance"
                                             value={dateOfBirth}
                                             onChange={(e) => setDOB(e.currentTarget.value)}
+                                        />
+                                    </Col>
+                                    <Col md="6" className="form-group">
+                                        <label htmlFor="feCNI">Numero de CNI</label>
+                                        <FormInput
+                                            id="feCNI"
+                                            placeholder="CNI"
+                                            value={cni}
+                                            onChange={(e) => setCNI(e.currentTarget.value)}
+                                        />
+                                    </Col>
+                                    <Col md="6" className="form-group">
+                                        <label htmlFor="feCNIDate">Date deliverance (CNI)</label>
+                                        <FormInput
+                                            type="date"
+                                            id="feCNIDate"
+                                            placeholder="Date de deliverance"
+                                            value={cni_date}
+                                            onChange={(e) => setCNIDate(e.currentTarget.value)}
+                                        />
+                                    </Col>
+                                    <Col md="6" className="form-group">
+                                        <label htmlFor="feJob">Profession</label>
+                                        <FormInput
+                                            id="feJob"
+                                            placeholder="Preofession"
+                                            value={job}
+                                            onChange={(e) => setJob(e.currentTarget.value)}
+                                        />
+                                    </Col>
+                                    <Col md="6" className="form-group">
+                                        <label htmlFor="feAddress">Domicilié à</label>
+                                        <FormInput
+                                            id="feAddress"
+                                            placeholder="Domicilié à"
+                                            value={address}
+                                            onChange={(e) => setAddress(e.currentTarget.value)}
                                         />
                                     </Col>
                                 </Row>

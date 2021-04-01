@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, CardBody, Button } from "shards-react";
 import { IconButton, Tooltip, Popover, Typography } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import DescriptionIcon from '@material-ui/icons/Description';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import AddIcon from '@material-ui/icons/Add';
 import DownloadIcon from '@material-ui/icons/GetApp';
 
@@ -11,9 +11,12 @@ import PageTitle from "../components/common/PageTitle";
 import Dialog from "../components/common/Dialog";
 import Contract from "./forms/Contract";
 import Confirm from "../components/common/Confirm";
+import ContractView from './ContractView';
 
 import { deleteContract } from "../utils/actions";
 import { getDateDayDiff } from "../utils/utils";
+
+import { downloadDoc } from '../utils/actions';
 
 class Tables extends React.Component {
   constructor(props) {
@@ -30,7 +33,8 @@ class Tables extends React.Component {
       templates: [],
       properties: [],
       tenants: [],
-      tabValue: 0
+      tabValue: 0,
+      docxPath: ''
     }
   }
 
@@ -43,11 +47,13 @@ class Tables extends React.Component {
   closeDialog = () => {
     this.setState({
       openContractDialog: false,
+      viewContractDialog: false,
       contract: null,
       confirmDialog: false,
       popoverContent: null,
       openPopover: false,
-      anchorEl: null
+      anchorEl: null,
+      tabValue: 0
     });
   };
 
@@ -65,6 +71,15 @@ class Tables extends React.Component {
     }, this.openContract);
   }
 
+  viewContract = (id) => {
+    const contract = this.getContract(id);
+    this.setState({
+      contract,
+      dialogTitle: `Apercu du Contrat No. ${contract.reference}`,
+      viewContractDialog: true
+    });
+  }
+
   deleteContract = (id) => {
     const contract = this.getContract(id);
     this.setState({
@@ -76,10 +91,6 @@ class Tables extends React.Component {
 
   setTabValue = (tabValue) => {
     this.setState({ tabValue })
-  }
-
-  downloadDoc = () => {
-
   }
 
   getContract = (id) => {
@@ -189,10 +200,18 @@ class Tables extends React.Component {
           title={this.state.dialogTitle}
           open={this.state.openContractDialog}
           onClose={this.closeDialog}
-          icons={this.state.tabValue === 2 &&
+          icons={this.state.tabValue === 2 && this.state.contract &&
             [<IconButton
               aria-label="download"
-              onClick={this.downloadDoc}
+              onClick={() => downloadDoc(
+                {
+                  filename: "Contrat-" + this.state.contract.reference + ".docx",
+                  values: {
+                    headerTitle: this.getTemplate(this.state.contract.template_id).t_name + "<br>N°" + this.state.contract.reference,
+                    htmlMarkup: document.getElementById('contract-container').innerHTML
+                  }
+                })
+              }
               color="primary"
             >
               <DownloadIcon />
@@ -200,6 +219,37 @@ class Tables extends React.Component {
           }
           fullScreen
           content={<Contract contract={this.state.contract} templates={this.state.templates} tenants={this.state.tenants} properties={this.state.properties} callback={this.handleCallback} setTabValue={this.setTabValue} />}
+        />
+        <Dialog
+          title={this.state.dialogTitle}
+          open={this.state.viewContractDialog && this.state.contract}
+          onClose={this.closeDialog}
+          icons={this.state.contract &&
+            [<IconButton
+              aria-label="download"
+              onClick={() => downloadDoc(
+                {
+                  filename: "Contrat-" + this.state.contract.reference + ".docx",
+                  values: {
+                    headerTitle: this.getTemplate(this.state.contract.template_id).t_name + "<br>N°" + this.state.contract.reference,
+                    htmlMarkup: document.getElementById('contract-container').innerHTML
+                  }
+                })
+              }
+              color="primary"
+            >
+              <DownloadIcon />
+            </IconButton>]
+          }
+          fullScreen
+          content={
+            <ContractView
+              template={this.state.contract && this.getTemplate(this.state.contract.template_id)}
+              tenant={this.state.contract && this.getTenant(JSON.parse(this.state.contract.tenant_ids)[0])}
+              property={this.state.contract && this.getProperty(this.state.contract.property_id)}
+              contract={this.state.contract}
+            />
+          }
         />
         <Dialog
           title={this.state.dialogTitle}
@@ -280,7 +330,7 @@ class Tables extends React.Component {
                           <tr key={idx}>
                             <td>{idx + 1}</td>
                             <td>{t.reference}</td>
-                            <td>{this.getTemplate(t.template_id).t_name}</td>
+                            <td>{this.state.templates.length > 0 && this.getTemplate(t.template_id).t_name}</td>
                             <td>
                               <Button outline size="sm" theme="primary" className="mb-2 mr-1" onClick={(e) => this.openPopover({ notes: this.getTenantDisplay(t.tenant_ids), anchorEl: e.currentTarget })}>
                                 Voir Locataires
@@ -296,14 +346,14 @@ class Tables extends React.Component {
                               </Button>
                             </td>
                             <td className='list-controls'>
-                              <Tooltip title="Modifier Contrat">
-                                <IconButton aria-label="edit contract" color="primary" onClick={() => this.editContract(t.id)}>
-                                  <EditIcon />
+                              <Tooltip title="View Contrat">
+                                <IconButton aria-label="edit contract" color="primary" onClick={() => this.viewContract(t.id)}>
+                                  <VisibilityIcon />
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="Modifier Contrat">
-                                <IconButton aria-label="edit contract" color="primary">
-                                  <DescriptionIcon />
+                                <IconButton aria-label="edit contract" color="primary" onClick={() => this.editContract(t.id)}>
+                                  <EditIcon />
                                 </IconButton>
                               </Tooltip>
                               <Tooltip title="Supprimer Contrat">

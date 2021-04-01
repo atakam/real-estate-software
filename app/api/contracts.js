@@ -1,5 +1,6 @@
 const { clean } = require('../utils/utils');
 const ndb = require("../../databasePool");
+const { createDoc } = require('nodejs-html-docx');
 
 const getContracts = (req, res) => {
   const db = ndb();
@@ -150,9 +151,25 @@ const updateContract = (req, res) => {
   db.end();
 }
 
+const downloadDoc = (req, res) => {
+  const {
+    htmlMarkup,
+    headerTitle
+  } = req.body;
+  createDoc(htmlMarkup, { headerTitle, outputFile: 'Report' }).then(path => {
+    // you get the path for the generated file here
+    console.log('Conversion complete at => ', path)
+    res.download(path); // Set disposition and send it.
+  }).catch(err => {
+    // You know this
+    console.log(err)
+  })
+}
+
 module.exports = {
   createContract,
   updateContract,
   deleteContract,
-  getContracts
+  getContracts,
+  downloadDoc
 };

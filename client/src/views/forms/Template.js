@@ -77,7 +77,8 @@ const UserAccountDetails = ({ template, callback }) => {
         const section = JSON.parse(JSON.stringify(sections));
         section.push({
             title: '',
-            content: EditorState.createEmpty().toJS()
+            content: EditorState.createEmpty().toJS(),
+            position: sections.length
         });
         setSections(section);
     }

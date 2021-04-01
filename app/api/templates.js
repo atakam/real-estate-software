@@ -19,7 +19,7 @@ const getSections = (req, res) => {
   const id = req.params.id;
   const db = ndb();
   db.query(
-    "SELECT * FROM template_sections WHERE template_id = ?",
+    "SELECT * FROM template_sections WHERE template_id = ? ORDER BY template_sections.position ASC",
     id,
     (err, result) => {
       if (err) {

@@ -49,7 +49,8 @@ const {
   createContract,
   updateContract,
   deleteContract,
-  getContracts
+  getContracts,
+  downloadDoc
 } = require('./api/contracts');
 
 app.use(express.json());
@@ -108,5 +109,6 @@ app.get("/contract/findAll", getContracts);
 app.delete("/contract/delete/:id", deleteContract);
 app.post("/contract/create", createContract);
 app.put("/contract/update/:id", updateContract);
+app.post("/contract/docx", downloadDoc);
 
 module.exports = app;

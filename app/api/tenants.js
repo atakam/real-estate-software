@@ -24,6 +24,10 @@ const createTenant = (req, res) => {
     waNumber,
     dateOfBirth,
     isActive,
+    cni,
+    cni_date,
+    job,
+    address,
     notes
   } = req.body;
 
@@ -35,6 +39,10 @@ const createTenant = (req, res) => {
     waNumber,
     dateOfBirth,
     isActive,
+    cni,
+    cni_date,
+    job,
+    address,
     notes
   };
 
@@ -78,6 +86,10 @@ const updateTenant = (req, res) => {
     waNumber,
     dateOfBirth,
     isActive,
+    cni,
+    cni_date,
+    job,
+    address,
     notes
   } = req.body;
 
@@ -89,6 +101,10 @@ const updateTenant = (req, res) => {
     waNumber,
     dateOfBirth,
     isActive,
+    cni,
+    cni_date,
+    job,
+    address,
     notes
   };
 

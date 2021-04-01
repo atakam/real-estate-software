@@ -53,9 +53,9 @@ const UserAccountDetails = ({ contract, templates, tenants, properties, setTabVa
         amount,
         deposit,
         caution,
-        start_date,
-        deposit_date,
-        revision_date,
+        start_date: start_date.split('T')[0],
+        deposit_date: deposit_date.split('T')[0],
+        revision_date: revision_date.split('T')[0],
         payment_location,
         notes
     };
@@ -99,6 +99,16 @@ const UserAccountDetails = ({ contract, templates, tenants, properties, setTabVa
             }
         });
         return _template;
+    }
+
+    const getProperty = () => {
+        let _property = null;
+        properties.forEach((t) => {
+            if (t.id == property) {
+                _property = t;
+            }
+        });
+        return _property;
     }
 
     const step1 = {
@@ -225,7 +235,6 @@ const UserAccountDetails = ({ contract, templates, tenants, properties, setTabVa
                                 </FormSelect>
                             </Col>
                         </Row>
-                        <Button theme="accent" onClick={submitContract}>Submit</Button>
                     </Form>
                 </Col>
             </Row>
@@ -357,7 +366,12 @@ const UserAccountDetails = ({ contract, templates, tenants, properties, setTabVa
     const step3 = {
         label: 'Apercu',
         content: (
-            <ContractView template={getTemplate()} />
+            <ContractView
+                template={getTemplate()}
+                tenant={getTenant(tenant_ids[0])}
+                property={getProperty()}
+                contract={{ ...values }}
+            />
         )
     };
 
